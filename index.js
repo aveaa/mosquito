@@ -98,7 +98,7 @@ bot.on("guildMemberAdd", member => {
 
 bot.on('guildMemberRemove', member => {
     let welcomeChannel = member.guild.channels.find('name', '👋welcome');
-    welcomeChannel.send(`**${member.username}** покинул нас.(`);
+    welcomeChannel.send(`**${member.user.username}** покинул нас.(`);
 });
 
 bot.on('raw', event => {
