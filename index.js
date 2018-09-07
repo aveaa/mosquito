@@ -1019,88 +1019,96 @@ bot.on("message", (message) => {
         }
     }
 
+    let reportCoolDown = false;
+
     if (cmd === prefix + "report") {
-        let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
-        let rSpellingEmbed = new Discord.RichEmbed()
-            .setAuthor(name = bot.user.username, icon_url = bIcon)
-            .setDescription(`Правописание ${prefix}report`)
-            .addField("Правописание команды", `${prefix}report [ник] [причина]`)
-            .setColor(embedColor)
-            .setFooter(version, sender.displayAvatarURL)
-
-
-        if (!rUser) {
-            let userNotFoundEmbed = new Discord.RichEmbed()
+        if (!reportCoolDown) {
+            let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+            let rSpellingEmbed = new Discord.RichEmbed()
                 .setAuthor(name = bot.user.username, icon_url = bIcon)
-                .setDescription("Пользователь не найден")
+                .setDescription(`Правописание ${prefix}report`)
+                .addField("Правописание команды", `${prefix}report [ник] [причина]`)
                 .setColor(embedColor)
                 .setFooter(version, sender.displayAvatarURL)
 
-            message.delete().catch(O_o => { });
-            message.channel.send(userNotFoundEmbed);
-            return message.channel.send(rSpellingEmbed);
-        }
 
-        if (rUser.id == bot.user.id) {
-            let rCantReportBot = new Discord.RichEmbed()
-                .setAuthor(name = bot.user.username, icon_url = bIcon)
-                .setDescription("Нельзя кинуть жалобу на бота")
+            if (!rUser) {
+                let userNotFoundEmbed = new Discord.RichEmbed()
+                    .setAuthor(name = bot.user.username, icon_url = bIcon)
+                    .setDescription("Пользователь не найден")
+                    .setColor(embedColor)
+                    .setFooter(version, sender.displayAvatarURL)
+
+                message.delete().catch(O_o => { });
+                message.channel.send(userNotFoundEmbed);
+                return message.channel.send(rSpellingEmbed);
+            }
+
+            if (rUser.id == bot.user.id) {
+                let rCantReportBot = new Discord.RichEmbed()
+                    .setAuthor(name = bot.user.username, icon_url = bIcon)
+                    .setDescription("Нельзя кинуть жалобу на бота")
+                    .setColor(embedColor)
+                    .setFooter(version, sender.displayAvatarURL)
+
+                message.delete().catch(O_o => { });
+                return message.channel.send(rCantReportBot);
+            }
+
+            if (rUser.id == sender.id) {
+                let rCantReportUrSelf = new Discord.RichEmbed()
+                    .setAuthor(name = bot.user.username, icon_url = bIcon)
+                    .setDescription("Нельзя кинуть жалобу на себя")
+                    .setColor(embedColor)
+                    .setFooter(version, sender.displayAvatarURL)
+
+                message.delete().catch(O_o => { });
+                return message.channel.send(rCantReportUrSelf);
+            }
+
+            let rReason = args.join(' ').slice(22);
+            if (!rReason) {
+                let rNoReasonEmbed = new Discord.RichEmbed()
+                    .setAuthor(name = bot.user.username, icon_url = bIcon)
+                    .setDescription("<@" + sender.id + ">, вы не указали причину")
+                    .setColor(embedColor)
+                    .setFooter(version, sender.displayAvatarURL)
+
+                message.delete().catch(O_o => { });
+                message.channel.send(rNoReasonEmbed);
+                return message.channel.send(rSpellingEmbed);
+            }
+
+            let reportCreated = message.createdAt.toString().split(' ');
+            let reportCreatedAt = reportCreated[2] + ' ' + reportCreated[1] + ", " + reportCreated[3];
+            let reportEmbed = new Discord.RichEmbed()
+                .setThumbnail(rUser.displayAvatarURL)
+                .setDescription("Жалоба на пользователя")
+                .setColor(embedColor)
+                .addField("Ник ", rUser, true)
+                .addField("ID ", + rUser.id, true)
+                .addField("Пожаловался ", sender, true)
+                .addField("Время: ", reportCreatedAt, true)
+                .addField("Причина", rReason, true)
+                .setFooter(version, sender.displayAvatarURL)
+
+            let reportEmbedText = new Discord.RichEmbed()
+                .setThumbnail(rUser.displayAvatarURL)
+                .setDescription(":white_check_mark: Жалоба на пользователя успешно отправлена")
                 .setColor(embedColor)
                 .setFooter(version, sender.displayAvatarURL)
 
-            message.delete().catch(O_o => { });
-            return message.channel.send(rCantReportBot);
-        }
-
-        if (rUser.id == sender.id) {
-            let rCantReportUrSelf = new Discord.RichEmbed()
-                .setAuthor(name = bot.user.username, icon_url = bIcon)
-                .setDescription("Нельзя кинуть жалобу на себя")
-                .setColor(embedColor)
-                .setFooter(version, sender.displayAvatarURL)
+            if (!logChannel)
+                return message.channel.send("Не удалось найти текстовый канал для репортов")
 
             message.delete().catch(O_o => { });
-            return message.channel.send(rCantReportUrSelf);
+            message.channel.send(reportEmbedText);
+            message.guild.channels.find('name', "log").send(reportEmbed);
+            reportCoolDown = true;
+            setTimeout(function() {
+                reportCoolDown = false;
+            }, ms("300000"))
+            return;
         }
-
-        let rReason = args.join(' ').slice(22);
-        if (!rReason) {
-            let rNoReasonEmbed = new Discord.RichEmbed()
-                .setAuthor(name = bot.user.username, icon_url = bIcon)
-                .setDescription("<@" + sender.id + ">, вы не указали причину")
-                .setColor(embedColor)
-                .setFooter(version, sender.displayAvatarURL)
-
-            message.delete().catch(O_o => { });
-            message.channel.send(rNoReasonEmbed);
-            return message.channel.send(rSpellingEmbed);
-        }
-
-        let reportCreated = message.createdAt.toString().split(' ');
-        let reportCreatedAt = reportCreated[2] + ' ' + reportCreated[1] + ", " + reportCreated[3];
-        let reportEmbed = new Discord.RichEmbed()
-            .setThumbnail(rUser.displayAvatarURL)
-            .setDescription("Жалоба на пользователя")
-            .setColor(embedColor)
-            .addField("Ник ", rUser, true)
-            .addField("ID ", + rUser.id, true)
-            .addField("Пожаловался ", sender, true)
-            .addField("Время: ", reportCreatedAt, true)
-            .addField("Причина", rReason, true)
-            .setFooter(version, sender.displayAvatarURL)
-
-        let reportEmbedText = new Discord.RichEmbed()
-            .setThumbnail(rUser.displayAvatarURL)
-            .setDescription(":white_check_mark: Жалоба на пользователя успешно отправлена")
-            .setColor(embedColor)
-            .setFooter(version, sender.displayAvatarURL)
-
-        if (!logChannel)
-            return message.channel.send("Не удалось найти текстовый канал для репортов")
-
-        message.delete().catch(O_o => { });
-        message.channel.send(reportEmbedText);
-        message.guild.channels.find('name', "log").send(reportEmbed);
-        return;
     }
 })
