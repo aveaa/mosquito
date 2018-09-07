@@ -96,6 +96,11 @@ bot.on("guildMemberAdd", member => {
     member.addRole(joinRole);
 });
 
+bot.on('guildMemberRemove', member => {
+    let welcomeChannel = member.guild.channels.find('name', '👋welcome');
+    welcomeChannel.send(`**${member.username}** покинул нас.(`);
+});
+
 bot.on('raw', event => {
     if (event.t === 'MESSAGE_REACTION_ADD') {
         let channel = bot.channels.get(event.d.channel_id);
@@ -166,7 +171,7 @@ bot.on("message", (message) => {
                 message.delete().catch(O_o => { });
                 let finalString = new Discord.RichEmbed()
                     .setAuthor(name = bot.user.username, icon_url = bIcon)
-                    .setThumbnail(iUser.displayAvatarURL)
+                    .setThumbnail(iUser.user.displayAvatarURL)
                     .setDescription("Информация о <@" + iUser.id + ">")
                     .setColor(embedColor)
                     .addField("Ник: ", `<@${iUser.id}>`, true)
