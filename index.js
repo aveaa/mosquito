@@ -132,6 +132,7 @@ bot.on("message", (message) => {
     let bIcon = bot.user.displayAvatarURL;
     let sIcon = sender.displayAvatarURL;
     let embedColor = Math.floor(Math.random() * 16777214) + 1;
+    let logChannel = message.guild.channels.find('name', "log");
 
     if (message.guild.id != "262587335151976448" || message.guild.id != "418357514099359744") {
         if (cmd.startsWith(prefix + "info")) {
@@ -1009,7 +1010,6 @@ bot.on("message", (message) => {
     }
 
     if (cmd === prefix + "report") {
-        let logChannel = message.guild.channels.find('name', "log");
         let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
         let rSpellingEmbed = new Discord.RichEmbed()
             .setAuthor(name = bot.user.username, icon_url = bIcon)
@@ -1091,7 +1091,6 @@ bot.on("message", (message) => {
             return message.channel.send("Не удалось найти текстовый канал для репортов")
 
         message.delete().catch(O_o => { });
-        let logChannel = message.guild.channels.find('name', 'log');
         logChannel.send(reportEmbed);
 
         message.author.send(reportEmbedText)
