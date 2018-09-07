@@ -6,8 +6,8 @@ const botconfig = require("./botconfig.json");
 const ms = require("ms");
 const fs = require("fs");
 
-//bot.login(process.env.BOT_TOKEN);
-bot.login(botconfig.token);
+bot.login(process.env.BOT_TOKEN);
+//bot.login(botconfig.token);
 
 function clean(text) {
     if (typeof (text) === "string")
