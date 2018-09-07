@@ -125,7 +125,6 @@ bot.on('raw', event => {
 bot.on("message", (message) => {
     let sender = message.author;
     let version = `${message.author.tag}`;
-    let logChannel = message.guild.channels.find('name', 'log');
     let msg = message.content.toLowerCase();
     let messageArray = msg.split(' ');
     let cmd = messageArray[0];
@@ -1092,7 +1091,7 @@ bot.on("message", (message) => {
             return message.channel.send("Не удалось найти текстовый канал для репортов")
 
         message.delete().catch(O_o => { });
-
+        let logChannel = message.guild.channels.find('name', 'log');
         logChannel.send(reportEmbed);
 
         message.author.send(reportEmbedText)
