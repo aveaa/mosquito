@@ -6,8 +6,8 @@ const botconfig = require("./botconfig.json");
 const ms = require("ms");
 const fs = require("fs");
 
-bot.login(process.env.BOT_TOKEN);
-//bot.login(botconfig.token);
+//bot.login(process.env.BOT_TOKEN);
+bot.login(botconfig.token);
 
 function clean(text) {
     if (typeof (text) === "string")
@@ -1091,9 +1091,9 @@ bot.on("message", (message) => {
             return message.channel.send("Не удалось найти текстовый канал для репортов")
 
         message.delete().catch(O_o => { });
-        logChannel.send(reportEmbed);
+        message.guild.channels.find('name', "log").send(reportEmbed);
 
-        message.author.send(reportEmbedText)
+        message.author.send(reportEmbedText);
         return;
     }
 })
