@@ -169,14 +169,16 @@ bot.on("message", (message) => {
                     return message.channel.send(finalString);
                 }
                 message.delete().catch(O_o => { });
+                let userCreated = iUser.user.createdAt.toString().split(' ');
                 let finalString = new Discord.RichEmbed()
                     .setAuthor(name = bot.user.username, icon_url = bIcon)
                     .setThumbnail(iUser.user.displayAvatarURL)
                     .setDescription("Информация о <@" + iUser.id + ">")
                     .setColor(embedColor)
                     .addField("Ник: ", `<@${iUser.id}>`, true)
-                    .addField("Дискорд тэг", `${iUser.tag}`, true)
+                    .addField("Дискорд тэг", `${iUser.user.tag}`, true)
                     .addField("ID: ", iUser.id, true)
+                    .addField("Аккаунт был создан: ", userCreated[2] + ' ' + userCreated[1] + ", " + userCreated[3], true)
                     .setFooter(version, sender.displayAvatarURL)
                 return message.channel.send(finalString)
                     .catch(error => {
