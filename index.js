@@ -123,7 +123,7 @@ bot.on('raw', event => {
 })
 
 bot.on("message", (message) => {
-    let reportCoolDown = false;
+    let reportCoolDown = "0";
     let logChannel = message.guild.channels.find('name', "log");
     let sender = message.author;
     let version = `${message.author.tag}`;
@@ -1021,7 +1021,7 @@ bot.on("message", (message) => {
     }
 
     if (cmd === prefix + "report") {
-        if (reportCoolDown) {
+        if (reportCoolDown = "1") {
             let reportCoolDownEmbed = new Discord.RichEmbed()
                 .setAuthor(name = bot.user.username, icon_url = bIcon)
                 .setDescription(`Команду ${prefix}report можно использовать раз в 5 минут`)
@@ -1037,7 +1037,6 @@ bot.on("message", (message) => {
             .addField("Правописание команды", `${prefix}report [ник] [причина]`)
             .setColor(embedColor)
             .setFooter(version, sender.displayAvatarURL)
-
 
         if (!rUser) {
             let userNotFoundEmbed = new Discord.RichEmbed()
@@ -1113,7 +1112,7 @@ bot.on("message", (message) => {
         message.guild.channels.find('name', "log").send(reportEmbed);
         reportCoolDown = true;
         setTimeout(function () {
-            reportCoolDown = false;
+            reportCoolDown = "0";
         }, ms("300000"))
         return;
     }
