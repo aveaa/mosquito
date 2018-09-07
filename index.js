@@ -6,8 +6,8 @@ const botconfig = require("./botconfig.json");
 const ms = require("ms");
 const fs = require("fs");
 
-//bot.login(process.env.BOT_TOKEN);
-bot.login(botconfig.token);
+bot.login(process.env.BOT_TOKEN);
+//bot.login(botconfig.token);
 
 function clean(text) {
     if (typeof (text) === "string")
@@ -123,6 +123,7 @@ bot.on('raw', event => {
 })
 
 bot.on("message", (message) => {
+    let logChannel = message.guild.channels.find('name', "log");
     let sender = message.author;
     let version = `${message.author.tag}`;
     let msg = message.content.toLowerCase();
@@ -132,7 +133,6 @@ bot.on("message", (message) => {
     let bIcon = bot.user.displayAvatarURL;
     let sIcon = sender.displayAvatarURL;
     let embedColor = Math.floor(Math.random() * 16777214) + 1;
-    let logChannel = message.guild.channels.find('name', "log");
 
     if (message.guild.id != "262587335151976448" || message.guild.id != "418357514099359744") {
         if (cmd.startsWith(prefix + "info")) {
@@ -344,6 +344,7 @@ bot.on("message", (message) => {
                 .setColor(embedColor)
                 .setFooter(version, sender.displayAvatarURL)
             message.delete().catch(O_o => { });
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(gModLog)
             message.channel.send(gChannelLog).catch(console.error);
         } else {
@@ -414,6 +415,7 @@ bot.on("message", (message) => {
                 .setColor(embedColor)
                 .setFooter(version, sender.displayAvatarURL)
             message.delete().catch(O_o => { });
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(gRolesModLog)
             message.channel.send(gRolesChannelLog).catch(console.error);
         } else {
@@ -486,6 +488,7 @@ bot.on("message", (message) => {
                 .setColor(embedColor)
                 .setFooter(version, sender.displayAvatarURL)
             message.delete().catch(O_o => { });
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(rRolesModLog)
             message.channel.send(rRolesChannelLog).catch(console.error);
         } else {
@@ -664,6 +667,7 @@ bot.on("message", (message) => {
         async function functionMuteTwo() {
             await (toMute.addRole(muterole.id));
             message.channel.send(muteModLog);
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(muteModLog);
         }
 
@@ -677,6 +681,7 @@ bot.on("message", (message) => {
                 .setColor(embedColor)
                 .setFooter(version, sender.displayAvatarURL)
 
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(muteMuted);
         }, ms(muteTime));
     }
@@ -741,6 +746,7 @@ bot.on("message", (message) => {
         async function functionUnMuteTwo() {
             await (toUnMute.removeRole(unMuteRole.id));
             message.channel.send(unMuted);
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(unMuteModLog);
         }
         functionUnMuteTwo();
@@ -812,6 +818,7 @@ bot.on("message", (message) => {
                 .addField("Причина ", kReason, true)
                 .setFooter(version, sender.displayAvatarURL)
             message.delete().catch(O_o => { });
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(kModLog)
             message.channel.send(kModLog).catch(console.error);
         } else {
@@ -911,6 +918,7 @@ bot.on("message", (message) => {
                 .addField("Причина ", `${bReason}`, true)
                 .setFooter(version, sender.displayAvatarURL)
             message.delete().catch(O_o => { });
+            let logChannel = message.guild.channels.find('name', "log");
             logChannel.send(bModLog);
             message.channel.send(bModLog).catch(console.error);
 
@@ -922,6 +930,7 @@ bot.on("message", (message) => {
                     .setColor(embedColor)
                     .setFooter(version, sender.displayAvatarURL)
 
+                let logChannel = message.guild.channels.find('name', "log");
                 logChannel.send(bUnBan);
             }, ms(banTime));
 
@@ -990,6 +999,7 @@ bot.on("message", (message) => {
                     .addField('Разбанил ', "<@" + message.author.id + ">", true)
                     .setFooter(version, sender.displayAvatarURL)
                 message.delete().catch(O_o => { });
+                let logChannel = message.guild.channels.find('name', "log");
                 logChannel.send(uBModLog);
                 message.channel.send(uBChannelLog).catch(console.error);
             }, ms("1s"));
@@ -1083,17 +1093,14 @@ bot.on("message", (message) => {
             .setThumbnail(rUser.displayAvatarURL)
             .setDescription(":white_check_mark: Жалоба на пользователя успешно отправлена")
             .setColor(embedColor)
-            .addField("Ник ", rUser, true)
-            .addField("Причина", rReason, true)
             .setFooter(version, sender.displayAvatarURL)
 
         if (!logChannel)
             return message.channel.send("Не удалось найти текстовый канал для репортов")
 
         message.delete().catch(O_o => { });
+        message.channel.send(reportEmbedText);
         message.guild.channels.find('name', "log").send(reportEmbed);
-
-        message.author.send(reportEmbedText);
         return;
     }
 })
