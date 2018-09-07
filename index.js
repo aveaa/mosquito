@@ -6,8 +6,8 @@ const botconfig = require("./botconfig.json");
 const ms = require("ms");
 const fs = require("fs");
 
-bot.login(process.env.BOT_TOKEN);
-//bot.login(botconfig.token);
+//bot.login(process.env.BOT_TOKEN);
+bot.login(botconfig.token);
 
 function clean(text) {
     if (typeof (text) === "string")
@@ -1110,7 +1110,7 @@ bot.on("message", (message) => {
         message.delete().catch(O_o => { });
         message.channel.send(reportEmbedText);
         message.guild.channels.find('name', "log").send(reportEmbed);
-        reportCoolDown = true;
+        reportCoolDown = "1";
         setTimeout(function () {
             reportCoolDown = "0";
         }, ms("300000"))
