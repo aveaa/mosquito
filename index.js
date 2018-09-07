@@ -17,7 +17,7 @@ function clean(text) {
 }
 
 let prefix = botconfig.prefix;
-let roleJoin = "test";
+let roleJoin = "⛔ Ненадёжный";
 
 let statuses = [`discord.gg/restlbro | ${prefix}help`, `ролики Рестла | ${prefix}help`];
 let types = [0, 1, 2, 3];
@@ -103,7 +103,7 @@ bot.on('raw', event => {
             .then(msg => {
                 let user = msg.guild.members.get(event.d.user_id);
 
-                if (msg.author.id == '301218562146566146') {
+                if (msg.author.id == '456226577798135808') {
                     if (user.id != bot.user.id) {
                         var roleObj = msg.guild.roles.find('name', roleJoin);
                         var memberObj = msg.guild.members.get(user.id);
