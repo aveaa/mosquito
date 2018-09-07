@@ -1021,7 +1021,7 @@ bot.on("message", (message) => {
     }
 
     if (cmd === prefix + "report") {
-        if (reportCoolDown = "1") {
+        if (reportCoolDown == "1") {
             let reportCoolDownEmbed = new Discord.RichEmbed()
                 .setAuthor(name = bot.user.username, icon_url = bIcon)
                 .setDescription(`Команду ${prefix}report можно использовать раз в 5 минут`)
@@ -1113,7 +1113,7 @@ bot.on("message", (message) => {
         reportCoolDown = "1";
         setTimeout(function () {
             reportCoolDown = "0";
-        }, ms("300000"))
+        }, ms("300000"));
         return;
     }
 })
